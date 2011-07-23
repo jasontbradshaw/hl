@@ -50,7 +50,7 @@ def endc():
 
 def stress_test(iters):
     """
-    Process the input file line-by-line and write it to the output file.
+    Stress test the color generating function. We want this to be fast, baby.
     """
 
     # test our efficiency
