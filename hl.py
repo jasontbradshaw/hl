@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
+import sys
+import optparse
 import functools
+import re
 
 def memoize(f):
     """
@@ -58,20 +61,17 @@ def stress_test(iters):
         for c in xrange(256):
             color(c)
 
-def main(infile, outfile):
+def rainbow():
     """
-    Process the input file line-by-line and write it to the output file.
+    Print a nice rainbow of colors to the terminal.
     """
 
     # print a fabulous rainbow of colors!
     for c in xrange(256):
-        print str(c).rjust(3) + ": " + color(c) + "-=-" + endc()
+        print color(0, c) + str(c).center(3) + endc()
 
 if __name__ == "__main__":
-    import sys
-    import optparse
-
-    if len(sys.argv) > 1:
+    if sys.argv[1] == "test":
         stress_test(50000)
-    else:
-        main(sys.stdin, sys.stdout)
+    elif sys.argv[1] == "rainbow":
+        rainbow()
