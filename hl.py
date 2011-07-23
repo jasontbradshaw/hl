@@ -70,8 +70,18 @@ def rainbow():
     for c in xrange(256):
         print color(0, c) + str(c).center(3) + endc()
 
+def main(infile):
+    """
+    Read the given file line-by-line, highlighting it as specified and printing
+    the highlighted output to the console.
+    """
+
+    for line in infile:
+        print repr(line)
+
 if __name__ == "__main__":
-    if sys.argv[1] == "test":
-        stress_test(50000)
-    elif sys.argv[1] == "rainbow":
-        rainbow()
+    if len(sys.argv) > 1:
+        with open(sys.argv[1], 'r') as f:
+            main(f)
+    else:
+        main(sys.stdin)
