@@ -24,7 +24,7 @@ def memoize(f):
             m[args] = result
             return result
         except TypeError:
-            # args we're hashable, ex. dicts aren't hashable, so just call f
+            # args weren't hashable (ex. dicts aren't hashable) so just call f
             return f(*args)
 
     return wrapper
