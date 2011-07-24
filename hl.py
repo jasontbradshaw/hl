@@ -38,10 +38,12 @@ def color(fg_color, bg_color=None):
     in effect until the reset code is used or the color is changed.
     """
 
-    # we return only the first 3 items if there's no bg color, else all of it
+    # build and return the minimum viable color string for the requested color
     if bg_color is None:
+        # we don't need the background color if none was specified
         return "\033[38;5;" + str(fg_color) + "m"
     else:
+        # if both were specified, put the two colors together
         return "\033[38;5;" + str(fg_color) + "m\033[48;5;" + str(bg_color) + "m"
 
 def endc():
@@ -95,11 +97,11 @@ def highlight(pattern, infile=sys.stdin, outfile=sys.stdout):
         for start, end in match_indexes:
             # add the new parts of our highlighted line
             hl_line += line[last_end:start]
-            hl_line += color(3)
+            hl_line += color(0, 10)
             hl_line += line[start:end]
             hl_line += endc()
 
-            # move the last end up so we can continue from there
+            # move the last end up so we can continue highlighting from there
             last_end = end
 
         # add the remaining unmatched part (possibly all) of the original line
