@@ -70,18 +70,41 @@ def rainbow():
     for c in xrange(256):
         print color(0, c) + str(c).center(3) + endc()
 
-def main(infile):
+def highlight(pattern, infile=sys.stdin, outfile=sys.stdout):
     """
     Read the given file line-by-line, highlighting it as specified and printing
     the highlighted output to the console.
     """
 
     for line in infile:
-        print repr(line)
+
+        # iterate over all the matches in our line (possibly none)
+        matches = pattern.finditer(line)
+
+        # accumulate all the match positions
+        match_indexes = []
+        for match in matches:
+            match_indexes.append((match.start(), match.end()))
+
+        # add the color codes all at once, so we don't have to worry about
+        # regexes matching the color codes themselves if we replaced in-place.
+        hl_line = []
+        last_end = 0
+        for start, end in match_indexes:
+            # add the new parts of our highlighted line
+            hl_line += line[last_end:start]
+            hl_line += color(3)
+            hl_line += line[start:end]
+            hl_line += endc()
+
+            # move the last end up so we can continue from there
+            last_end = end
+
+        # add the remaining unmatched part (possibly all) of the original line
+        hl_line += line[last_end:]
+
+        # write out the final, highlighted line
+        outfile.write(''.join(hl_line))
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        with open(sys.argv[1], 'r') as f:
-            main(f)
-    else:
-        main(sys.stdin)
+    highlight(re.compile(sys.argv[1]))
