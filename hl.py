@@ -5,6 +5,8 @@ import optparse
 import functools
 import re
 
+import time
+
 def memoize(f):
     """
     Used to memoize the calls of any function with hashable arguments.
@@ -107,4 +109,13 @@ def highlight(pattern, infile=sys.stdin, outfile=sys.stdout):
         outfile.write(''.join(hl_line))
 
 if __name__ == "__main__":
-    highlight(re.compile(sys.argv[1]))
+    if len(sys.argv) == 2 and sys.argv[1] == "stresstest":
+        iters = 50000
+        print "Stressing for %d iterations..." % iters
+        start_time = time.time()
+        stress_test(iters)
+        end_time = time.time()
+
+        print "%.3f seconds" % (end_time - start_time)
+    else:
+        highlight(re.compile(sys.argv[1]))
