@@ -4,7 +4,6 @@ import sys
 import optparse
 import functools
 import re
-
 import time
 
 def memoize(f):
