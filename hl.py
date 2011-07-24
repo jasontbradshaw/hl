@@ -70,8 +70,12 @@ def rainbow():
     """
 
     # print a fabulous rainbow of colors!
+    print "Standard colors:"
     for c in xrange(256):
-        print color(0, c) + str(c).center(3) + endc()
+        if c == 16:
+            print
+            print "Extended colors:"
+        print str(c).rjust(3) + ": " + color(0, c) + (" " * 5) + endc()
 
 def highlight(pattern, infile=sys.stdin, outfile=sys.stdout):
     """
@@ -110,13 +114,16 @@ def highlight(pattern, infile=sys.stdin, outfile=sys.stdout):
         outfile.write(''.join(hl_line))
 
 if __name__ == "__main__":
-    if len(sys.argv) == 2 and sys.argv[1] == "stresstest":
-        iters = 50000
-        print "Stressing for %d iterations..." % iters
-        start_time = time.time()
-        stress_test(iters)
-        end_time = time.time()
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "stresstest":
+            iters = 50000
+            print "Stressing for %d iterations..." % iters
+            start_time = time.time()
+            stress_test(iters)
+            end_time = time.time()
 
-        print "%.3f seconds" % (end_time - start_time)
+            print "%.3f seconds" % (end_time - start_time)
+        elif sys.argv[1] == "rainbow":
+            rainbow()
     else:
         highlight(re.compile(sys.argv[1]))
