@@ -154,8 +154,8 @@ class Highlighter:
 
 def highlight_file(highlighter, infile, outfile):
     """
-    Read the given file line-by-line, highlighting it as specified and printing
-    the highlighted output to the console.
+    Read the given input file line-by-line, highlighting it as specified and
+    write the highlighted output to the given output file.
     """
 
     # highlight and write out every line in the file
