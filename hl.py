@@ -34,10 +34,14 @@ def memoize(f):
 def make_color(fg_color=None, bg_color=None):
     """
     Returns a string representing the begin code for the given color. This stays
-    in effect until the reset code is used or the color is changed.
+    in effect until the reset code is used or the color is changed. Colors are
+    created via the ANSI color escape codes.
 
     Since this gets memoized, its efficiency isn't quite as important as you'd
     think, but we'll still try to keep it relatively efficent.
+
+    See http://en.wikipedia.org/wiki/ANSI_escape_code#Colors for details on ANSI
+    color escape codes.
     """
 
     # store the incomplete color specification string
