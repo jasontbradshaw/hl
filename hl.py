@@ -31,19 +31,31 @@ def memoize(f):
     return wrapper
 
 @memoize
-def make_color(fg_color, bg_color=None):
+def make_color(fg_color=None, bg_color=None):
     """
     Returns a string representing the begin code for the given color. This stays
     in effect until the reset code is used or the color is changed.
+
+    Since this gets memoized, its efficiency isn't quite as important as you'd
+    think, but we'll still try to keep it relatively efficent.
     """
 
-    # build and return the minimum viable color string for the requested color
-    if bg_color is None:
-        # we don't need the background color if none was specified
-        return "\033[38;5;" + str(fg_color) + "m"
-    else:
-        # if both were specified, put the two colors together
-        return "\033[38;5;" + str(fg_color) + "m\033[48;5;" + str(bg_color) + "m"
+    # store the incomplete color specification string
+    result = []
+
+    # add a foreground color if one is specified
+    if fg_color is not None:
+        result += "\033[38;5;"
+        result += str(fg_color)
+        result += "m"
+
+    # add a background color if one is specified
+    if bg_color is not None:
+        result += "\033[48;5;"
+        result += str(bg_color)
+        result += "m"
+
+    return ''.join(result)
 
 def make_endc():
     """
