@@ -114,16 +114,15 @@ def highlight(pattern, infile=sys.stdin, outfile=sys.stdout):
         outfile.write(''.join(hl_line))
 
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        if sys.argv[1] == "stresstest":
-            iters = 50000
-            print "Stressing for %d iterations..." % iters
-            start_time = time.time()
-            stress_test(iters)
-            end_time = time.time()
+    if len(sys.argv) == 2 and sys.argv[1] == "stresstest":
+        iters = 50000
+        print "Stressing for %d iterations..." % iters
+        start_time = time.time()
+        stress_test(iters)
+        end_time = time.time()
 
-            print "%.3f seconds" % (end_time - start_time)
-        elif sys.argv[1] == "rainbow":
-            rainbow()
+        print "%.3f seconds" % (end_time - start_time)
+    elif len(sys.argv) == 2 and sys.argv[1] == "rainbow":
+        rainbow()
     else:
         highlight(re.compile(sys.argv[1]))
