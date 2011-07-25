@@ -110,7 +110,7 @@ def highlight(pattern, infile=sys.stdin, outfile=sys.stdout):
         # add the remaining unmatched part (possibly all) of the original line
         hl_line += line[last_end:]
 
-        # write out the final, highlighted line
+        # write out the final completely highlighted line
         outfile.write(''.join(hl_line))
 
 if __name__ == "__main__":
