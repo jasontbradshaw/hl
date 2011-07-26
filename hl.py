@@ -192,9 +192,15 @@ def highlight_file(highlighter, infile, outfile):
     write the highlighted output to the given output file.
     """
 
-    # highlight and write out every line in the file
-    for line in infile:
+    # loop over the file in a while loop, since this prevents python from
+    # buffering the input. we don't want this to change a program's output
+    # characteristics, after all.
+    line = None
+    while line != "":
+        # read a line, write it to output, then flush the output
+        line = infile.readline()
         outfile.write(highlighter.highlight(line))
+        outfile.flush()
 
 if __name__ == "__main__":
     # test the efficiency of our highlighting function
