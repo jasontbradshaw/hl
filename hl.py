@@ -134,18 +134,8 @@ class Highlighter:
         returning the highlighted result.
         """
 
-        match_indexes = []
-        for pattern, color in self.patterns:
-            # iterate over all the matches in our text (possibly none) to
-            # accumulate all the match positions as (index, color). doing start
-            # and end separately allows us to have overlapping matches.
-            for match in pattern.finditer(text):
-                # TODO: accumulate by individual grounps, not just entire match
-                match_indexes.append((match.start(), make_color(*color)))
-                match_indexes.append((match.end(), make_endc()))
-
-        # sort the indexes by appearance order so matches can safely overlap
-        match_indexes.sort()
+        # get all the match indexes 
+        match_indexes = self.__get_match_indexes(self.patterns, text)
 
         # add the color codes all at once, so we don't have to worry about
         # regexes matching the color codes themselves if we'd replaced in-place.
@@ -164,6 +154,37 @@ class Highlighter:
 
         # assemble and return the highlighted text
         return ''.join(hl_text)
+
+    def __get_match_indexes(self, patterns, text):
+        """
+        Iterate over all the matches in a text (possibly none) to accumulate all
+        the match positions as (index, color). Accumulating start and end
+        indexes separately allows us to have overlapping matches without
+        duplicating text.
+
+        Returns a sorted list of unique start and end indexes paired with their
+        respective colors.
+        """
+
+        # keep a set of indexes so we don't insert duplicate text
+        match_indexes = set([])
+        for pattern, color in patterns:
+            for match in pattern.finditer(text):
+                # accumulate by individual groups if there are any or multiple
+                group_count = len(match.groups())
+                if group_count > 0:
+                    # we skip group 0 because it's just the entire match
+                    for g in xrange(1, group_count + 1):
+                        # add each group individually
+                        match_indexes.add((match.start(g), make_color(*color)))
+                        match_indexes.add((match.end(g), make_endc()))
+                else:
+                    # just add the entire match otherwise
+                    match_indexes.add((match.start(), make_color(*color)))
+                    match_indexes.add((match.end(), make_endc()))
+
+        # sort the indexes by appearance order so matches can safely overlap
+        return sorted(list(match_indexes))
 
 def highlight_file(highlighter, infile, outfile):
     """
