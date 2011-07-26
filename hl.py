@@ -136,34 +136,31 @@ class Highlighter:
 
         match_indexes = []
         for pattern, color in self.patterns:
-            # iterate over all the matches in our text (possibly none)
-            matches = pattern.finditer(text)
+            # iterate over all the matches in our text (possibly none) to
+            # accumulate all the match positions as (index, color). doing start
+            # and end separately allows us to have overlapping matches.
+            for match in pattern.finditer(text):
+                # TODO: accumulate by individual grounps, not just entire match
+                match_indexes.append((match.start(), make_color(*color)))
+                match_indexes.append((match.end(), make_endc()))
 
-            # accumulate all the match positions as (start, end, color)
-            for match in matches:
-                m = (match.start(), match.end(), color)
-                match_indexes.append(m)
-
-        # sort matches by their beginning indexes
-        # TODO: make overlapping matches work!
-        match_indexes = sorted(match_indexes, key=(lambda x: x[0]))
+        # sort the indexes by appearance order so matches can safely overlap
+        match_indexes.sort()
 
         # add the color codes all at once, so we don't have to worry about
-        # regexes matching the color codes themselves if we replaced in-place.
+        # regexes matching the color codes themselves if we'd replaced in-place.
         hl_text = []
-        last_end = 0
-        for start, end, color in match_indexes:
+        last_index = 0
+        for index, color in match_indexes:
             # add the new parts of our highlighted text
-            hl_text += text[last_end:start]
-            hl_text += make_color(*color)
-            hl_text += text[start:end]
-            hl_text += make_endc()
+            hl_text += text[last_index:index]
+            hl_text += color
 
             # move the last end up so we can continue highlighting from there
-            last_end = end
+            last_index = index
 
         # add the remaining unmatched part (possibly all) of the original text
-        hl_text += text[last_end:]
+        hl_text += text[last_index:]
 
         # assemble and return the highlighted text
         return ''.join(hl_text)
