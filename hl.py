@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-import optparse
-import functools
 import re
-import time
 
 def memoize(f):
     """
@@ -14,7 +11,6 @@ def memoize(f):
     # dict where results are stored
     m = {}
 
-    @functools.wraps(f)
     def wrapper(*args):
         try:
             # if we've already calculated the result, return it
@@ -200,9 +196,11 @@ def highlight_file(highlighter, infile, outfile):
         # read a line, write it to output, then flush the output
         line = infile.readline()
         outfile.write(highlighter.highlight(line))
-        outfile.flush()
 
 if __name__ == "__main__":
+    import time
+    import optparse
+
     # test the efficiency of our highlighting function
     if len(sys.argv) == 2 and sys.argv[1] == "stresstest":
         iters = 50000
