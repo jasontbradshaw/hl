@@ -87,7 +87,7 @@ def rainbow():
         # add a break and heading after the standard colors
         if c == 16:
             print
-            print "Extetitlended colors:"
+            print "Extended colors:"
 
         print str(c).rjust(3) + ": " + make_color(0, c) + (" " * 5) + make_endc()
 
