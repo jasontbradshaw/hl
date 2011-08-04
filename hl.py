@@ -102,7 +102,7 @@ class Highlighter:
         self.default_color = default_color
 
         # all the patterns and their colors that we'll match against
-        self.patterns = []
+        self.patterns = set()
 
     def add_pattern(self, pattern, color=None):
         """
@@ -121,8 +121,8 @@ class Highlighter:
         if color is not None:
             our_color = color
 
-        # add the compiled regex and its color tuple to our list
-        self.patterns.append((our_pattern, our_color))
+        # add the compiled regex and its color tuple to our pattern set
+        self.patterns.add((our_pattern, our_color))
 
     def highlight(self, text):
         """
@@ -163,7 +163,7 @@ class Highlighter:
         """
 
         # keep a set of indexes so we don't insert duplicate text
-        match_indexes = set([])
+        match_indexes = set()
         for pattern, color in patterns:
             for match in pattern.finditer(text):
                 # accumulate by individual groups if there are any or multiple
