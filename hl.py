@@ -222,4 +222,8 @@ if __name__ == "__main__":
             hl.add_pattern(pattern)
 
         # highlight stdin and write to stdout using our highlighter
-        highlight_file(hl, sys.stdin, sys.stdout)
+        try:
+            highlight_file(hl, sys.stdin, sys.stdout)
+        except KeyboardInterrupt:
+            # exit when the user kills the app
+            sys.exit(0)
