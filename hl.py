@@ -66,16 +66,6 @@ def make_endc():
     # 0 is the reset code, so we reset all attributes
     return "\033[0;0;0m"
 
-def stress_test(iters):
-    """
-    Stress test the color generating function. We want this to be fast, baby.
-    """
-
-    # test our efficiency
-    for i in xrange(iters):
-        for c in xrange(256):
-            make_color(c)
-
 def rainbow():
     """
     Print a nice rainbow of colors to the terminal.
@@ -201,17 +191,7 @@ if __name__ == "__main__":
     import time
     import optparse
 
-    # test the efficiency of our highlighting function
-    if len(sys.argv) == 2 and sys.argv[1] == "stresstest":
-        iters = 50000
-        print "Stressing for %d iterations..." % iters
-        start_time = time.time()
-        stress_test(iters)
-        end_time = time.time()
-
-        print "%.3f seconds" % (end_time - start_time)
-
-    elif len(sys.argv) == 2 and sys.argv[1] == "rainbow":
+    if len(sys.argv) == 2 and sys.argv[1] == "rainbow":
         # print a pretty rainbow to the console
         rainbow()
 
