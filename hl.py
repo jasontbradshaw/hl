@@ -120,14 +120,12 @@ class Highlighter:
         returning the highlighted result.
         """
 
-        # get all the match indexes 
-        match_indexes = self.__get_match_indexes(self.patterns, text)
-
+        # iterate over all the start/end indexes and colors of our matches and
         # add the color codes all at once, so we don't have to worry about
         # regexes matching the color codes themselves if we'd replaced in-place.
         hl_text = []
         last_index = 0
-        for index, color in match_indexes:
+        for index, color in self.__get_match_indexes(self.patterns, text):
             # add the new parts of our highlighted text
             hl_text += text[last_index:index]
             hl_text += color
